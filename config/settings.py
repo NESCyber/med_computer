@@ -28,9 +28,10 @@ SECRET_KEY = 'django-insecure-ba_zro%-^*+@5nbht_3+-=^r9%g*n1_@l6fpf1ougwqd)@i-$_
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "med-computers-backend.onrender.com",
-    "localhost",
-    "127.0.0.1"
+    '.vercel.app',
+    'med-computers-backend.onrender.com',
+    'localhost',
+    '127.0.0.1'
 ]
 
 
