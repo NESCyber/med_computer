@@ -16,5 +16,7 @@ else:
     u = User.objects.get(username='admin')
     u.set_password('admin123')
     u.role = 'admin'
+    u.is_staff = True
+    u.is_superuser = True
     u.save()
     print("Admin user password/role synchronized.")
