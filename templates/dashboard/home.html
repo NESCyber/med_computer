@@ -18,7 +18,7 @@
     <!-- Sales Card -->
     <div class="glass" style="padding: 2.25rem 2rem; position: relative; overflow: hidden; border-color: rgba(15, 23, 42, 0.08);">
         <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Gross Revenues</div>
-        <div style="font-size: 3.25rem; font-weight: 800; color: var(--primary); margin: 0.5rem 0; letter-spacing: -1px; line-height: 1;">GH₵{{ total_sales }}</div>
+        <div style="font-size: 3.25rem; font-weight: 800; color: var(--primary); margin: 0.5rem 0; letter-spacing: -1px; line-height: 1;">GH₵ {{ total_sales }}</div>
         <div style="font-size: 0.8rem; color: var(--success); margin-top: 0.5rem; font-weight: 600;">✔ Storefront Financial Totals</div>
     </div>
     
@@ -68,7 +68,7 @@
                         <div style="font-size: 0.8rem; color: var(--text-muted);">{{ order.created_at|date:"M d, Y" }} &bull; {{ order.user.username }}</div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <span style="font-weight: 800; color: var(--accent); font-size: 1.15rem;">GH₵{{ order.total_price }}</span>
+                        <span style="font-weight: 800; color: var(--accent); font-size: 1.15rem;">GH₵ {{ order.total_price }}</span>
                         {% if order.status == 'pending' %}
                             <span style="color: var(--warning); font-size: 0.75rem; font-weight: 700;">Pending</span>
                         {% elif order.status == 'paid' %}

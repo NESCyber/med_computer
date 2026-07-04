@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from accounts.decorators import admin_required
-from products.models import Category, Product, ProductImage
+from products.models import Category, Product, ProductImage, Review, SiteSetting
 from products.forms import CategoryForm, ProductForm
 from orders.models import Order, OrderItem
 from django.db.models import Sum
@@ -207,6 +207,45 @@ def category_delete(request, pk):
 def admin_order_detail(request, order_id):
     order = get_object_or_404(Order.objects.prefetch_related('items__product__images'), id=order_id)
     return render(request, 'dashboard/order_detail.html', {'order': order})
+
+
+@admin_required
+def review_list(request):
+    reviews = Review.objects.all().select_related('product', 'user').order_by('-created_at')
+    return render(request, 'dashboard/review_list.html', {'reviews': reviews})
+
+
+@admin_required
+def review_delete(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    if request.method == 'POST':
+        product_name = review.product.name
+        username = review.user.username
+        review.delete()
+        messages.success(request, f"Review for '{product_name}' by '{username}' was deleted successfully!")
+        return redirect('dashboard:review_list')
+    return render(request, 'dashboard/confirm_delete.html', {
+        'item': review,
+        'type': 'Review',
+        'cancel_url': 'dashboard:review_list'
+    })
+
+
+@admin_required
+def site_settings_edit(request):
+    settings = SiteSetting.get_settings()
+    if request.method == 'POST':
+        settings.store_name = request.POST.get('store_name', '').strip()
+        settings.location = request.POST.get('location', '').strip()
+        settings.phone_1 = request.POST.get('phone_1', '').strip()
+        settings.phone_2 = request.POST.get('phone_2', '').strip()
+        settings.whatsapp_number = request.POST.get('whatsapp_number', '').strip()
+        settings.momo_number = request.POST.get('momo_number', '').strip()
+        settings.momo_name = request.POST.get('momo_name', '').strip()
+        settings.save()
+        messages.success(request, "Site settings updated successfully!")
+        return redirect('dashboard:home')
+    return render(request, 'dashboard/settings_form.html', {'settings': settings})
 
 
 

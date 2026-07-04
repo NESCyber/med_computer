@@ -1,0 +1,161 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="/dashboard/" style="font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: -0.5px;">
+        MED<span style="font-weight: 300; opacity: 0.9;">COMPUTERS</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    /* Custom CSS variables to skin Django Admin to MED Computers Blue & White Theme */
+    :root {
+        --primary: #2563eb !important;
+        --primary-hover: #1d4ed8 !important;
+        --secondary: #1e3a8a !important;
+        --accent: #1e3a8a !important;
+        --header-bg: #1e3a8a !important;
+        --header-color: #ffffff !important;
+        --header-link-color: rgba(255, 255, 255, 0.85) !important;
+        --breadcrumbs-bg: #f8fafc !important;
+        --breadcrumbs-link-color: #2563eb !important;
+        --link-color: #2563eb !important;
+        --link-hover-color: #1d4ed8 !important;
+        --body-bg: #f8fafc !important;
+    }
+
+    body, input, select, textarea, button {
+        font-family: 'Outfit', sans-serif !important;
+    }
+
+    #header {
+        background: var(--header-bg) !important;
+        padding: 0.8rem 2rem !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.05) !important;
+    }
+
+    #header a:link, #header a:visited {
+        color: #ffffff !important;
+    }
+
+    #header a:hover {
+        color: #93c5fd !important;
+    }
+
+    #branding h1 a {
+        color: #ffffff !important;
+    }
+
+    /* Change lists and breadcrumbs styling overrides */
+    div.breadcrumbs {
+        background: #f8fafc !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+        color: #64748b !important;
+        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+        padding: 0.75rem 2rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    div.breadcrumbs a {
+        color: #2563eb !important;
+    }
+
+    /* Table Headers */
+    .module h2, .module caption, .inline-group h2 {
+        background: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 0.5px !important;
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px 8px 0 0 !important;
+    }
+
+    /* Action/Save buttons styling */
+    .submit-row input, input[type=submit], button.button {
+        background: #2563eb !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        border: none !important;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15) !important;
+        transition: all 0.2s ease !important;
+        color: #ffffff !important;
+    }
+
+    .submit-row input:hover, input[type=submit]:hover, button.button:hover {
+        background: #1d4ed8 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25) !important;
+    }
+
+    .submit-row input.default, input[type=submit].default {
+        background: #1e3a8a !important;
+    }
+
+    .submit-row input.default:hover, input[type=submit].default:hover {
+        background: #122558 !important;
+    }
+
+    /* Left Sidebar Overrides to make it clean */
+    #nav-sidebar {
+        border-right: 1px solid rgba(15, 23, 42, 0.05) !important;
+        background: #ffffff !important;
+    }
+
+    #nav-sidebar th, #nav-sidebar td {
+        font-size: 0.85rem !important;
+    }
+
+    .toggle-sidebar {
+        background: #2563eb !important;
+    }
+
+    /* Form Fields focused border styling */
+    form input[type=text]:focus, form input[type=password]:focus, form select:focus, form textarea:focus {
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+        outline: none !important;
+    }
+
+    /* Add Back to Custom Dashboard link inside the Admin header tools */
+    #user-tools {
+        display: flex !important;
+        align-items: center !important;
+        gap: 1.25rem !important;
+        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+    }
+
+    #user-tools a.dashboard-return-btn {
+        background: rgba(255, 255, 255, 0.15) !important;
+        padding: 0.35rem 0.85rem !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    #user-tools a.dashboard-return-btn:hover {
+        background: #ffffff !important;
+        color: #1e3a8a !important;
+    }
+</style>
+{% endblock %}
+
+{% block userlinks %}
+    <a href="/dashboard/" class="dashboard-return-btn">&larr; Return to Dashboard</a>
+    {{ block.super }}
+{% endblock %}

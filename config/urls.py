@@ -18,14 +18,26 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('login/', RedirectView.as_view(url='/admin/login/', permanent=True)),
+    path('accounts/login/', RedirectView.as_view(url='/admin/login/', permanent=True)),
+    path('admin/', RedirectView.as_view(url='/dashboard/', permanent=False)),
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
-    path('orders/', include('orders.urls')),
-    path('', include('products.urls')),
+    
+    # API endpoints
+    path('api/auth/', include('accounts.api_urls')),
+    path('api/products/', include('products.api_urls')),
+    path('api/orders/', include('orders.api_urls')),
+    
+    # Root path redirects to storefront
+    path('', RedirectView.as_view(url='http://localhost:5173/', permanent=False)),
 ]
+
+# Set the Django Admin header link "VIEW SITE" to point directly to the React storefront dev server
+admin.site.site_url = 'http://localhost:5173/'
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

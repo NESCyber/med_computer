@@ -96,3 +96,33 @@ class Review(models.Model):
     def __str__(self):
         return f"Review for {self.product.name} by {self.user.username}"
 
+
+class Advertisement(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='ads/%Y/%m/%d/')
+    link = models.URLField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class SiteSetting(models.Model):
+    store_name = models.CharField(max_length=255, default="MED Computers")
+    location = models.CharField(max_length=255, default="DIRECTLY OPPOSITE TO AIRTEL TIGO OFFICE, TAMALE.")
+    phone_1 = models.CharField(max_length=50, default="0549128355")
+    phone_2 = models.CharField(max_length=50, default="0508800955")
+    whatsapp_number = models.CharField(max_length=50, default="233549128355")
+    momo_number = models.CharField(max_length=50, default="0549128355")
+    momo_name = models.CharField(max_length=150, default="MED COMPUTERS")
+
+    def __str__(self):
+        return self.store_name
+
+    @classmethod
+    def get_settings(cls):
+        settings, created = cls.objects.get_or_create(id=1)
+        return settings
+
+

@@ -25,7 +25,7 @@
 
     <!-- Navigation Header -->
     <navbar>
-        <a href="{% url 'products:catalog' %}" class="logo">
+        <a href="/dashboard/" class="logo">
             MED<span class="logo-accent">COMPUTERS</span>
         </a>
         
@@ -37,31 +37,23 @@
         </button>
         
         <ul class="nav-links" id="navLinksMenu">
-            {% if '/dashboard/' in request.path %}
-                <!-- Admin Dashboard Navbar -->
-                <li><a href="{% url 'dashboard:home' %}">Dashboard Home</a></li>
-                <li><a href="{% url 'dashboard:product_list' %}">Manage Products</a></li>
-                <li><a href="{% url 'dashboard:admin_order_list' %}">Fulfill Orders</a></li>
-                <li><a href="{% url 'products:catalog' %}" style="color: var(--primary);">View Storefront</a></li>
-                {% if request.user.is_authenticated %}
-                    <li><span>Hello, Admin {{ request.user.first_name|default:request.user.username }}</span></li>
-                    <li><a href="{% url 'accounts:logout' %}" class="btn btn-outline">Logout</a></li>
-                {% endif %}
-            {% else %}
-                <!-- Public Customer Navbar -->
-                <li><a href="{% url 'products:catalog' %}">Catalog</a></li>
-                <li><a href="{% url 'orders:cart_detail' %}">Cart {% if cart|length > 0 %}<span style="background: var(--primary); color: var(--bg-dark); padding: 0.1rem 0.4rem; border-radius: 9999px; font-weight: 700; font-size: 0.8rem;">{{ cart|length }}</span>{% endif %}</a></li>
-                {% if request.user.is_authenticated %}
-                    <li><a href="{% url 'orders:order_list' %}">My Orders</a></li>
-                    {% if request.user.is_admin %}
-                        <li><a href="{% url 'dashboard:home' %}" style="color: var(--accent);">Dashboard</a></li>
+            <li><a href="{% url 'dashboard:home' %}">Dashboard Home</a></li>
+            <li>
+                <a href="{% url 'dashboard:product_list' %}">
+                    Manage Products
+                    {% if low_stock_count > 0 %}
+                        <span style="background: var(--danger); color: white; padding: 0.15rem 0.4rem; font-size: 0.7rem; font-weight: 800; border-radius: 9999px; margin-left: 0.25rem; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; line-height: 1;">{{ low_stock_count }}</span>
                     {% endif %}
-                    <li><span>Hello, {{ request.user.first_name|default:request.user.username }}</span></li>
-                    <li><a href="{% url 'accounts:logout' %}" class="btn btn-outline">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
-                    <li><a href="{% url 'accounts:register' %}" class="btn btn-primary">Sign Up</a></li>
-                {% endif %}
+                </a>
+            </li>
+            <li><a href="{% url 'dashboard:admin_order_list' %}">Fulfill Orders</a></li>
+            <li><a href="{% url 'dashboard:review_list' %}">Moderate Reviews</a></li>
+            <li><a href="/admin/products/advertisement/">Manage Pop-up Ads</a></li>
+            <li><a href="{% url 'dashboard:site_settings_edit' %}">Site Settings</a></li>
+            <li><a href="http://localhost:5173/" target="_blank" style="color: var(--primary);">View Storefront ↗</a></li>
+            {% if request.user.is_authenticated %}
+                <li><span>{{ request.user.first_name|default:request.user.username }}</span></li>
+                <li><a href="/admin/logout/?next=/admin/login/" class="btn btn-outline">Logout</a></li>
             {% endif %}
         </ul>
     </navbar>
@@ -74,8 +66,12 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 MED Computers & Tech Hub. All rights reserved.</p>
-        <p>Powered by senior engineering standards.</p>
+        <p style="margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700; color: var(--accent);">
+            DIRECTLY OPPOSITE TO AIRTEL TIGO OFFICE, TAMALE &bull; TEL: 0549128355 / 0508800955
+        </p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid rgba(15,23,42,0.05); padding-top: 0.5rem; display: inline-block; width: 100%; max-width: 450px; margin: 0 auto;">
+            &copy; 2026 MED Computers & Tech Hub. All rights reserved.
+        </p>
     </footer>
 
     <script>

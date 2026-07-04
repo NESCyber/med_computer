@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="margin-top: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+    <!-- Section Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-weight: 800; font-size: 1.75rem; color: var(--accent); letter-spacing: -0.5px;">Store Configuration Settings</h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-top: 0.25rem;">Dynamically update storefront contacts, address coordinates, and MoMo billing accounts</p>
+    </div>
+
+    <!-- Edit Settings Form Card -->
+    <div class="glass" style="padding: 2rem; background: white;">
+        <form method="post" id="settings-form">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 1.25rem; text-align: left;">
+                <label for="id_store_name" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Store Name</label>
+                <input type="text" name="store_name" id="id_store_name" value="{{ settings.store_name }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+            </div>
+
+            <div style="margin-bottom: 1.25rem; text-align: left;">
+                <label for="id_location" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Physical Location & Directions</label>
+                <input type="text" name="location" id="id_location" value="{{ settings.location }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                <div style="text-align: left;">
+                    <label for="id_phone_1" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Primary Phone</label>
+                    <input type="text" name="phone_1" id="id_phone_1" value="{{ settings.phone_1 }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+                </div>
+                <div style="text-align: left;">
+                    <label for="id_phone_2" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Secondary Phone</label>
+                    <input type="text" name="phone_2" id="id_phone_2" value="{{ settings.phone_2 }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem; text-align: left;">
+                <label for="id_whatsapp_number" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">WhatsApp Number (Intl format, e.g. 233549128355)</label>
+                <input type="text" name="whatsapp_number" id="id_whatsapp_number" value="{{ settings.whatsapp_number }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.75rem;">
+                <div style="text-align: left;">
+                    <label for="id_momo_number" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">MoMo Pay Number</label>
+                    <input type="text" name="momo_number" id="id_momo_number" value="{{ settings.momo_number }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+                </div>
+                <div style="text-align: left;">
+                    <label for="id_momo_name" style="display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">MoMo Pay Name</label>
+                    <input type="text" name="momo_name" id="id_momo_name" value="{{ settings.momo_name }}" required style="width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.85rem; font-weight: 600; color: var(--text-main); background-color: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.1); border-radius: 10px; transition: all 0.3s ease;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="{% url 'dashboard:home' %}" class="btn" style="flex: 1; text-align: center; background: #f1f5f9; color: #475569; border: 1px solid rgba(15, 23, 42, 0.05); padding: 0.75rem; font-size: 0.85rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                    Cancel
+                </a>
+                <button type="submit" class="btn" style="flex: 2; background: var(--primary); color: white; border: none; padding: 0.75rem; font-size: 0.85rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);">
+                    Save Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Simple focus listeners to input fields
+    document.querySelectorAll('#settings-form input').forEach(input => {
+        input.addEventListener('focus', () => {
+            input.style.borderColor = 'var(--primary)';
+            input.style.backgroundColor = 'white';
+            input.style.boxShadow = '0 0 0 4px rgba(37, 99, 235, 0.1)';
+        });
+        input.addEventListener('blur', () => {
+            input.style.borderColor = 'rgba(15, 23, 42, 0.1)';
+            input.style.backgroundColor = '#f8fafc';
+            input.style.boxShadow = 'none';
+        });
+    });
+</script>
+{% endblock %}

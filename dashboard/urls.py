@@ -22,4 +22,11 @@ urlpatterns = [
     path('orders/', views.admin_order_list, name='admin_order_list'),
     path('orders/<int:order_id>/', views.admin_order_detail, name='admin_order_detail'),
     path('orders/<int:order_id>/status/', views.admin_order_status_update, name='admin_order_status_update'),
+    
+    # Reviews Management
+    path('reviews/', views.review_list, name='review_list'),
+    path('reviews/<int:pk>/delete/', views.review_delete, name='review_delete'),
+    
+    # Store Configuration Settings
+    path('settings/', views.site_settings_edit, name='site_settings_edit'),
 ]
