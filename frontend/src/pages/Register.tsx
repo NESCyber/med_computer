@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2, Monitor, UserPlus } from 'lucide-react';
 
@@ -39,7 +40,7 @@ const Register: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    fetch('http://localhost:8000/api/auth/register/', {
+    fetch(`${API_BASE_URL}/api/auth/register/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

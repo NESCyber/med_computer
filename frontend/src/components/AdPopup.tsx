@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ExternalLink } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 interface ActiveAd {
   id: number;
@@ -17,7 +18,7 @@ const AdPopup: React.FC = () => {
     const hasSeenAd = sessionStorage.getItem('med_ad_displayed');
     if (hasSeenAd) return;
 
-    fetch('http://localhost:8000/api/products/active-ad/')
+    fetch(`${API_BASE_URL}/api/products/active-ad/`)
       .then((res) => {
         if (res.ok) return res.json();
         throw new Error('No active ad');
@@ -71,7 +72,7 @@ const AdPopup: React.FC = () => {
               className="block group overflow-hidden rounded-2xl relative"
             >
               <img
-                src={`http://localhost:8000${ad.image}`}
+                src={`${API_BASE_URL}${ad.image}`}
                 alt={ad.title}
                 className="w-full h-auto max-h-[400px] object-cover group-hover:scale-102 transition-all duration-500"
               />
@@ -86,7 +87,7 @@ const AdPopup: React.FC = () => {
           ) : (
             <div className="overflow-hidden rounded-2xl">
               <img
-                src={`http://localhost:8000${ad.image}`}
+                src={`${API_BASE_URL}${ad.image}`}
                 alt={ad.title}
                 className="w-full h-auto max-h-[400px] object-cover"
               />

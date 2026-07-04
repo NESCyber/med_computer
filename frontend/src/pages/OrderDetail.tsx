@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
+import { API_BASE_URL } from '../config';
 import { Loader2, CornerUpLeft, Phone, Calendar, MapPin, CheckCircle, FileText, Star } from 'lucide-react';
 
 interface OrderItem {
@@ -58,7 +59,7 @@ const OrderDetail: React.FC = () => {
 
   const fetchOrderDetail = () => {
     setLoading(true);
-    fetch(`http://localhost:8000/api/orders/${id}/`, {
+    fetch(`${API_BASE_URL}/api/orders/${id}/`, {
       headers: {
         'Authorization': `Token ${token}`,
       },
@@ -104,7 +105,7 @@ const OrderDetail: React.FC = () => {
       formData.append('payment_receipt', receiptFile);
     }
 
-    fetch(`http://localhost:8000/api/orders/${order.id}/confirm/`, {
+    fetch(`${API_BASE_URL}/api/orders/${order.id}/confirm/`, {
       method: 'POST',
       headers: {
         'Authorization': `Token ${token}`,
@@ -283,7 +284,7 @@ const OrderDetail: React.FC = () => {
               {order.payment_receipt && (
                 <div className="mt-2">
                   <a
-                    href={`http://localhost:8000${order.payment_receipt}`}
+                    href={`${API_BASE_URL}${order.payment_receipt}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm transition-all-300"
@@ -380,7 +381,7 @@ const OrderDetail: React.FC = () => {
                   <div className="flex items-center gap-4">
                     <div className="h-12 w-12 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden flex items-center justify-center flex-shrink-0">
                       {item.image ? (
-                        <img src={`http://localhost:8000${item.image}`} alt={item.product_name} className="h-full w-full object-cover" />
+                        <img src={`${API_BASE_URL}${item.image}`} alt={item.product_name} className="h-full w-full object-cover" />
                       ) : (
                         <Star className="h-6 w-6 text-slate-300" />
                       )}

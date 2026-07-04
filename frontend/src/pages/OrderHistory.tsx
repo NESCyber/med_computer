@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2, CornerUpLeft, ClipboardList } from 'lucide-react';
 
@@ -25,7 +26,7 @@ const OrderHistory: React.FC = () => {
       return;
     }
 
-    fetch('http://localhost:8000/api/orders/', {
+    fetch(`${API_BASE_URL}/api/orders/`, {
       headers: {
         'Authorization': `Token ${token}`,
       },

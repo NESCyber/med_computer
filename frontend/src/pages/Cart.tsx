@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 import { Trash2, ShoppingCart, ShieldAlert, ArrowRight, CornerUpLeft } from 'lucide-react';
 
 const Cart: React.FC = () => {
@@ -38,7 +39,7 @@ const Cart: React.FC = () => {
               <div className="flex items-center gap-4 flex-1">
                 <div className="h-16 w-16 bg-slate-50 rounded-xl border border-slate-100 overflow-hidden flex items-center justify-center flex-shrink-0">
                   {item.image ? (
-                    <img src={`http://localhost:8000${item.image}`} alt={item.name} className="h-full w-full object-cover" />
+                    <img src={`${API_BASE_URL}${item.image}`} alt={item.name} className="h-full w-full object-cover" />
                   ) : (
                     <ShoppingCart className="h-6 w-6 text-slate-300" />
                   )}

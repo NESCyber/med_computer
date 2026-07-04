@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Star, Loader2, ShoppingCart, MessageSquare, ShieldCheck, CornerUpLeft } from 'lucide-react';
@@ -59,7 +60,7 @@ const ProductDetail: React.FC = () => {
       headers['Authorization'] = `Token ${token}`;
     }
 
-    fetch(`http://localhost:8000/api/products/${slug}/`, { headers })
+    fetch(`${API_BASE_URL}/api/products/${slug}/`, { headers })
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load product specifications.');
         return res.json();
@@ -99,7 +100,7 @@ const ProductDetail: React.FC = () => {
     setReviewError(null);
     setReviewSuccess(false);
 
-    fetch(`http://localhost:8000/api/products/${slug}/review/`, {
+    fetch(`${API_BASE_URL}/api/products/${slug}/review/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -163,7 +164,7 @@ const ProductDetail: React.FC = () => {
         <div className="flex flex-col gap-4">
           <div className="bg-white border border-slate-200/80 rounded-3xl overflow-hidden h-[400px] flex items-center justify-center p-4 relative shadow-sm">
             {activeImage ? (
-              <img src={`http://localhost:8000${activeImage}`} alt={product.name} className="max-h-full max-w-full object-contain" />
+              <img src={`${API_BASE_URL}${activeImage}`} alt={product.name} className="max-h-full max-w-full object-contain" />
             ) : (
               <Star className="h-20 w-20 text-slate-200" />
             )}
@@ -179,7 +180,7 @@ const ProductDetail: React.FC = () => {
                     activeImage === img ? 'border-primary shadow-sm ring-2 ring-primary/10' : 'border-slate-200 hover:border-slate-300'
                   }`}
                 >
-                  <img src={`http://localhost:8000${img}`} alt="" className="h-full w-full object-contain" />
+                  <img src={`${API_BASE_URL}${img}`} alt="" className="h-full w-full object-contain" />
                 </button>
               ))}
             </div>

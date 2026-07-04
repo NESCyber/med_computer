@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2, Monitor, LogIn } from 'lucide-react';
 
@@ -33,7 +34,7 @@ const Login: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    fetch('http://localhost:8000/api/auth/login/', {
+    fetch(`${API_BASE_URL}/api/auth/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

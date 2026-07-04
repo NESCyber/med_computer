@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 
 export interface SiteSettings {
   store_name: string;
@@ -32,7 +33,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/products/settings/')
+    fetch(`${API_BASE_URL}/api/products/settings/`)
       .then((res: Response) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

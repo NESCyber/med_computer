@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { ShoppingCart, Menu, X, Monitor, ShieldAlert } from 'lucide-react';
@@ -43,7 +44,7 @@ const Navbar: React.FC = () => {
               <>
                 <Link to="/orders" className="text-slate-600 hover:text-primary font-medium transition-all-300">My Orders</Link>
                 {user?.role === 'admin' && (
-                  <a href="http://localhost:8000/dashboard/" className="text-amber-600 hover:text-amber-800 font-bold transition-all-300 flex items-center gap-1">
+                  <a href={`${API_BASE_URL}/dashboard/`} className="text-amber-600 hover:text-amber-800 font-bold transition-all-300 flex items-center gap-1">
                     <ShieldAlert className="h-4 w-4" />
                     <span>Dashboard</span>
                   </a>
@@ -118,7 +119,7 @@ const Navbar: React.FC = () => {
           <>
             <Link to="/orders" onClick={() => setIsOpen(false)} className="text-lg text-slate-600 hover:text-primary font-semibold py-2 border-b border-slate-100">My Orders</Link>
             {user?.role === 'admin' && (
-              <a href="http://localhost:8000/dashboard/" onClick={() => setIsOpen(false)} className="text-lg text-amber-600 hover:text-amber-800 font-bold py-2 border-b border-slate-100 flex items-center gap-1">
+              <a href={`${API_BASE_URL}/dashboard/`} onClick={() => setIsOpen(false)} className="text-lg text-amber-600 hover:text-amber-800 font-bold py-2 border-b border-slate-100 flex items-center gap-1">
                 <ShieldAlert className="h-4 w-4" />
                 <span>Dashboard</span>
               </a>

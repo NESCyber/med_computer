@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../contexts/CartContext';
+import { API_BASE_URL } from '../config';
 import { Search, Loader2, Star, Plus, Monitor } from 'lucide-react';
 
 interface Product {
@@ -31,7 +32,7 @@ const Catalog: React.FC = () => {
 
   useEffect(() => {
     // Fetch categories
-    fetch('http://localhost:8000/api/products/categories/')
+    fetch(`${API_BASE_URL}/api/products/categories/`)
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error('Error fetching categories:', err));
@@ -39,7 +40,7 @@ const Catalog: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    let url = 'http://localhost:8000/api/products/';
+    let url = `${API_BASE_URL}/api/products/`;
     const params = new URLSearchParams();
     if (searchQuery) params.append('q', searchQuery);
     if (selectedCategory) params.append('category', selectedCategory);
@@ -174,7 +175,7 @@ const Catalog: React.FC = () => {
                   <a href={`/product/${prod.slug}`} className="block h-52 overflow-hidden bg-slate-50 relative border-b border-slate-100 flex-shrink-0">
                     {prod.image ? (
                       <img
-                        src={`http://localhost:8000${prod.image}`}
+                        src={`${API_BASE_URL}${prod.image}`}
                         alt={prod.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                       />

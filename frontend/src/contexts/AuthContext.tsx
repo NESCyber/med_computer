@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { API_BASE_URL } from '../config';
 
 interface User {
   username: string;
@@ -28,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     if (token) {
       // Fetch user profile using the token
-      fetch('http://localhost:8000/api/auth/user/', {
+      fetch(`${API_BASE_URL}/api/auth/user/`, {
         headers: {
           'Authorization': `Token ${token}`,
         },

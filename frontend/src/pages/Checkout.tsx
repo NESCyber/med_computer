@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { CreditCard, Loader2, CornerUpLeft, ArrowRight } from 'lucide-react';
@@ -58,7 +59,7 @@ const Checkout: React.FC = () => {
       quantity: item.quantity,
     }));
 
-    fetch('http://localhost:8000/api/orders/create/', {
+    fetch(`${API_BASE_URL}/api/orders/create/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
