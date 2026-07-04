@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Login - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div class="form-container glass">
+    <h2 class="form-title">Welcome Back</h2>
+    <p class="form-subtitle">Log in to your MED Computers account</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div style="color: var(--danger); margin-bottom: 1rem; font-size: 0.9rem;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <span style="color: var(--danger); font-size: 0.8rem;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1.5rem;">Log In</button>
+    </form>
+    
+    <div class="form-footer">
+        <p>Don't have an account? <a href="{% url 'accounts:register' %}">Sign Up</a></p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Category Details - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div class="form-container glass" style="max-width: 500px; border-color: rgba(15, 23, 42, 0.06); background: white;">
+    <h2 class="form-title" style="background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ title }}</h2>
+    <p class="form-subtitle">Create classifications for grouping tech products together</p>
+    
+    <form method="POST" style="margin-top: 1.5rem;">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div style="color: var(--danger); margin-bottom: 1rem; font-size: 0.9rem;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label for="{{ field.id_for_label }}" style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <span style="color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; display: block;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <div style="display: flex; gap: 1rem; margin-top: 2.25rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center; border: none; border-radius: 8px; font-weight: 700; padding: 0.7rem;">Save Category</button>
+            <a href="{% url 'dashboard:category_list' %}" class="btn btn-outline" style="flex: 1; justify-content: center; text-align: center; border-radius: 8px; padding: 0.7rem; font-weight: 700;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

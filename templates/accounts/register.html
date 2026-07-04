@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Register - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div class="form-container glass" style="max-width: 550px;">
+    <h2 class="form-title">Create Account</h2>
+    <p class="form-subtitle">Register to shop online and track your tech orders</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div style="color: var(--danger); margin-bottom: 1rem; font-size: 0.9rem;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <span style="color: var(--text-muted); font-size: 0.75rem;">{{ field.help_text|safe }}</span>
+                {% endif %}
+                {% if field.errors %}
+                    <span style="color: var(--danger); font-size: 0.8rem;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1.5rem;">Register</button>
+    </form>
+    
+    <div class="form-footer">
+        <p>Already have an account? <a href="{% url 'accounts:login' %}">Log In</a></p>
+    </div>
+</div>
+{% endblock %}

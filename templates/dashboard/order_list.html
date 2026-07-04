@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Manage Orders - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem;">
+    <div>
+        <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Order Fulfillment</h1>
+        <p style="color: var(--text-muted); margin-top: 0.25rem;">View, track status, and dispatch ordered hardware configurations.</p>
+    </div>
+    <a href="{% url 'dashboard:home' %}" class="btn btn-outline" style="border-radius: 9999px;">Dashboard Overview</a>
+</div>
+
+<div class="glass" style="padding: 2rem; border-color: rgba(15, 23, 42, 0.06); overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 2px solid rgba(15, 23, 42, 0.08); font-weight: 700; color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                <th style="padding: 1rem 0.5rem;">Order ID</th>
+                <th style="padding: 1rem 0.5rem;">Customer</th>
+                <th style="padding: 1rem 0.5rem;">Date Placed</th>
+                <th style="padding: 1rem 0.5rem;">Destination</th>
+                <th style="padding: 1rem 0.5rem;">Status (Fulfillment Action)</th>
+                <th style="padding: 1rem 0.5rem;">Grand Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.04); transition: var(--transition);" onmouseover="this.style.background='rgba(15, 23, 42, 0.01)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 1.25rem 0.5rem; font-weight: 800;"><a href="{% url 'dashboard:admin_order_detail' order.id %}" style="color: var(--primary); text-decoration: none; transition: var(--transition);" onmouseover="this.style.color='var(--primary-hover)'" onmouseout="this.style.color='var(--primary)'">#{{ order.id }}</a></td>
+                    <td style="padding: 1.25rem 0.5rem; font-weight: 700; color: var(--text-main);">{{ order.user.get_full_name|default:order.user.username }}</td>
+                    <td style="padding: 1.25rem 0.5rem; color: var(--text-muted); font-size: 0.9rem;">{{ order.created_at|date:"M d, Y \a\t H:i" }}</td>
+                    <td style="padding: 1.25rem 0.5rem; color: var(--text-muted); font-size: 0.9rem;" title="{{ order.shipping_address }}">{{ order.shipping_address|truncatewords:6 }}</td>
+                    
+                    <!-- Status selector form -->
+                    <td style="padding: 1.25rem 0.5rem;">
+                        <form action="{% url 'dashboard:admin_order_status_update' order.id %}" method="POST" style="margin: 0; display: inline-block;">
+                            {% csrf_token %}
+                            <select name="status" onchange="this.form.submit()" class="form-control" 
+                                    style="width: 130px; padding: 0.4rem 0.6rem; font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer;
+                                           {% if order.status == 'pending' %}color: var(--warning); background-color: rgba(245, 158, 11, 0.06); border-color: rgba(245, 158, 11, 0.25);
+                                           {% elif order.status == 'paid' %}color: var(--success); background-color: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.25);
+                                           {% elif order.status == 'shipped' %}color: var(--primary); background-color: rgba(37, 99, 235, 0.06); border-color: rgba(37, 99, 235, 0.25);
+                                           {% else %}color: var(--text-muted); background-color: rgba(15, 23, 42, 0.03); border-color: rgba(15, 23, 42, 0.1);{% endif %}">
+                                <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="paid" {% if order.status == 'paid' %}selected{% endif %}>Paid</option>
+                                <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                                <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            </select>
+                        </form>
+                    </td>
+                    
+                    <td style="padding: 1.25rem 0.5rem; font-weight: 800; color: var(--accent); font-size: 1.15rem;">GH₵{{ order.total_price }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 4rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.95rem;">No orders placed yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

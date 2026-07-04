@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MED COMPUTERS & TECH HUB{% endblock %}</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Messages Alert system -->
+    {% if messages %}
+    <div class="messages-container" id="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <span>{{ message }}</span>
+            <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Navigation Header -->
+    <navbar>
+        <a href="{% url 'products:catalog' %}" class="logo">
+            MED<span class="logo-accent">COMPUTERS</span>
+        </a>
+        
+        <!-- Hamburger Menu Toggle Button -->
+        <button class="menu-toggle-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <ul class="nav-links" id="navLinksMenu">
+            {% if '/dashboard/' in request.path %}
+                <!-- Admin Dashboard Navbar -->
+                <li><a href="{% url 'dashboard:home' %}">Dashboard Home</a></li>
+                <li><a href="{% url 'dashboard:product_list' %}">Manage Products</a></li>
+                <li><a href="{% url 'dashboard:admin_order_list' %}">Fulfill Orders</a></li>
+                <li><a href="{% url 'products:catalog' %}" style="color: var(--primary);">View Storefront</a></li>
+                {% if request.user.is_authenticated %}
+                    <li><span>Hello, Admin {{ request.user.first_name|default:request.user.username }}</span></li>
+                    <li><a href="{% url 'accounts:logout' %}" class="btn btn-outline">Logout</a></li>
+                {% endif %}
+            {% else %}
+                <!-- Public Customer Navbar -->
+                <li><a href="{% url 'products:catalog' %}">Catalog</a></li>
+                <li><a href="{% url 'orders:cart_detail' %}">Cart {% if cart|length > 0 %}<span style="background: var(--primary); color: var(--bg-dark); padding: 0.1rem 0.4rem; border-radius: 9999px; font-weight: 700; font-size: 0.8rem;">{{ cart|length }}</span>{% endif %}</a></li>
+                {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'orders:order_list' %}">My Orders</a></li>
+                    {% if request.user.is_admin %}
+                        <li><a href="{% url 'dashboard:home' %}" style="color: var(--accent);">Dashboard</a></li>
+                    {% endif %}
+                    <li><span>Hello, {{ request.user.first_name|default:request.user.username }}</span></li>
+                    <li><a href="{% url 'accounts:logout' %}" class="btn btn-outline">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                    <li><a href="{% url 'accounts:register' %}" class="btn btn-primary">Sign Up</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </navbar>
+
+    <!-- Main Content Grid -->
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 MED Computers & Tech Hub. All rights reserved.</p>
+        <p>Powered by senior engineering standards.</p>
+    </footer>
+
+    <script>
+        // Toggle mobile hamburger menu drawer
+        function toggleMobileMenu() {
+            const menu = document.getElementById('navLinksMenu');
+            const btn = document.querySelector('.menu-toggle-btn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+
+        // Auto-dismiss alert notifications after 5 seconds
+        setTimeout(function() {
+            const container = document.getElementById('messages-container');
+            if (container) {
+                container.style.transition = 'opacity 0.5s ease';
+                container.style.opacity = '0';
+                setTimeout(() => container.remove(), 500);
+            }
+        }, 5000);
+    </script>
+    {% if '/dashboard/' not in request.path %}
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/233549128355?text=Hello%20MED%20Computers,%20I%20have%20a%20question%20about%20your%20premium%20hardware." 
+       id="globalWhatsAppBtn"
+       class="whatsapp-btn"
+       target="_blank" 
+       title="Contact us on WhatsApp">
+        💬
+    </a>
+    {% endif %}
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

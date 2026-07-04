@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Manage Products - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem;">
+    <div>
+        <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Products Catalog</h1>
+        <p style="color: var(--text-muted); margin-top: 0.25rem;">View, update stock, and edit specifications for all hardware listings.</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="{% url 'dashboard:product_create' %}" class="btn btn-primary" style="border-radius: 9999px;">+ Add Product</a>
+        <a href="{% url 'dashboard:category_list' %}" class="btn btn-outline" style="border-radius: 9999px;">Manage Categories</a>
+    </div>
+</div>
+
+<div class="glass" style="padding: 2rem; border-color: rgba(15, 23, 42, 0.06); overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 2px solid rgba(15, 23, 42, 0.08); font-weight: 700; color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                <th style="padding: 1rem 0.5rem;">Product Details</th>
+                <th style="padding: 1rem 0.5rem;">Category</th>
+                <th style="padding: 1rem 0.5rem;">Retail Price</th>
+                <th style="padding: 1rem 0.5rem;">Stock Status</th>
+                <th style="padding: 1rem 0.5rem; text-align: center;">Active</th>
+                <th style="padding: 1rem 0.5rem; text-align: right;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.04); transition: var(--transition);" onmouseover="this.style.background='rgba(15, 23, 42, 0.01)'" onmouseout="this.style.background='transparent'">
+                    <td style="padding: 1.25rem 0.5rem; font-weight: 700; display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: #fafafa; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(15, 23, 42, 0.06); flex-shrink: 0;">
+                            {% if product.images.exists %}
+                                <img src="{{ product.images.first.image.url }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                                <svg width="20" height="20" fill="none" stroke="var(--text-muted)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 113.758-3.848 5.25 5.25 0 00-10.233-2.33A4.502 4.502 0 002.25 15z"/></svg>
+                            {% endif %}
+                        </div>
+                        <span style="color: var(--text-main); font-size: 1.05rem;">{{ product.name }}</span>
+                    </td>
+                    <td style="padding: 1.25rem 0.5rem; color: var(--text-muted); font-weight: 600;">
+                        {% if product.category %}
+                            {{ product.category.name }}
+                        {% else %}
+                            <span style="color: var(--text-muted); font-style: italic;">Unassigned</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1.25rem 0.5rem; font-weight: 800; color: var(--accent);">GH₵{{ product.price }}</td>
+                    <td style="padding: 1.25rem 0.5rem;">
+                        {% if product.stock == 0 %}
+                            <span style="color: var(--danger); font-weight: 700; background: #fef2f2; border: 1px solid #fecaca; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem;">Out of Stock</span>
+                        {% elif product.stock <= 5 %}
+                            <span style="color: var(--warning); font-weight: 700; background: #fffbeb; border: 1px solid #fef3c7; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem;">Low ({{ product.stock }} left)</span>
+                        {% else %}
+                            <span style="color: var(--success); font-weight: 700; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem;">In Stock ({{ product.stock }})</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1.25rem 0.5rem; text-align: center;">
+                        {% if product.is_active %}
+                            <span style="color: var(--success); font-weight: 700; font-size: 0.9rem;">✔</span>
+                        {% else %}
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">✖</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1.25rem 0.5rem; text-align: right; font-weight: 700; font-size: 0.9rem;">
+                        <a href="{% url 'dashboard:product_edit' product.pk %}" style="color: var(--primary); text-decoration: none; margin-right: 1.25rem; transition: var(--transition);" onmouseover="this.style.color='var(--primary-hover)'" onmouseout="this.style.color='var(--primary)'">Edit</a>
+                        <a href="{% url 'dashboard:product_delete' product.pk %}" style="color: var(--danger); text-decoration: none; transition: var(--transition);" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="padding: 4rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.95rem;">No products registered yet. Click "+ Add Product" to begin.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

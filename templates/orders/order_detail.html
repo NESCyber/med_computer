@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }} - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.25rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Order #{{ order.id }}</h1>
+        <p style="color: var(--text-muted); margin-top: 0.25rem;">Placed on {{ order.created_at|date:"F d, Y \a\t H:i" }}</p>
+    </div>
+    <a href="{% url 'orders:order_list' %}" class="btn btn-outline" style="border-radius: 9999px;">View Order History</a>
+</div>
+
+<!-- Payment instructions alert banner -->
+<div class="glass" style="padding: 1.5rem; margin-bottom: 2rem; border-left: 5px solid var(--primary); background: rgba(37, 99, 235, 0.03); display: flex; align-items: center; gap: 1.25rem; border-color: rgba(37, 99, 235, 0.1) rgba(37, 99, 235, 0.1) rgba(37, 99, 235, 0.1) var(--primary);">
+    <div style="font-size: 2rem; line-height: 1;">📞</div>
+    <div>
+        <h4 style="font-weight: 800; color: var(--accent); font-size: 1.1rem; margin-bottom: 0.25rem;">Complete Your Payment Manually</h4>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.4; margin: 0;">
+            To complete processing for this order, please call our billing desk at <strong style="color: var(--primary); font-size: 1rem;">+233 54 912 8355</strong>. Share your <strong>Order ID (#{{ order.id }})</strong> to coordinate mobile money or manual cash transfer options.
+        </p>
+    </div>
+</div>
+
+<!-- Tracking Progress bar -->
+<div class="glass" style="padding: 2.5rem; margin-bottom: 2rem;">
+    <h3 style="font-weight: 700; margin-bottom: 2rem; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; font-size: 1rem;">Fulfillment Telemetry</h3>
+    
+    <div style="display: flex; justify-content: space-between; position: relative; margin: 0 1.5rem;">
+        <!-- Connector line -->
+        <div style="position: absolute; top: 14px; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.05); z-index: 1;"></div>
+        
+        <!-- Steps -->
+        <!-- Step 1: Pending -->
+        <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 80px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
+                        background: var(--success); color: var(--bg-dark); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">✔</div>
+            <span style="font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; color: var(--success);">Placed</span>
+        </div>
+        
+        <!-- Step 2: Paid -->
+        <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 80px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
+                        {% if order.status != 'pending' %}
+                            background: var(--success); color: var(--bg-dark); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+                        {% else %}
+                            background: rgba(255,255,255,0.05); color: var(--text-muted);
+                        {% endif %}">
+                {% if order.status != 'pending' %}✔{% else %}2{% endif %}
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; {% if order.status != 'pending' %}color: var(--success);{% else %}color: var(--text-muted);{% endif %}">Paid</span>
+        </div>
+        
+        <!-- Step 3: Shipped -->
+        <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 80px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
+                        {% if order.status == 'shipped' or order.status == 'delivered' %}
+                            background: var(--primary); color: var(--bg-dark); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+                        {% else %}
+                            background: rgba(255,255,255,0.05); color: var(--text-muted);
+                        {% endif %}">
+                {% if order.status == 'shipped' or order.status == 'delivered' %}✔{% else %}3{% endif %}
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; {% if order.status == 'shipped' or order.status == 'delivered' %}color: var(--primary);{% else %}color: var(--text-muted);{% endif %}">Shipped</span>
+        </div>
+        
+        <!-- Step 4: Delivered -->
+        <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2; width: 80px;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
+                        {% if order.status == 'delivered' %}
+                            background: var(--success); color: var(--bg-dark); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+                        {% else %}
+                            background: rgba(255,255,255,0.05); color: var(--text-muted);
+                        {% endif %}">
+                {% if order.status == 'delivered' %}✔{% else %}4{% endif %}
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 600; margin-top: 0.75rem; {% if order.status == 'delivered' %}color: var(--success);{% else %}color: var(--text-muted);{% endif %}">Delivered</span>
+        </div>
+    </div>
+</div>
+
+<div class="grid-responsive-2col">
+    <!-- Left Column (Form and Items) -->
+    <div style="display: flex; flex-direction: column; gap: 2rem; width: 100%;">
+        {% if order.payment_reference %}
+            <!-- Payment reference notice -->
+            <div class="glass" style="padding: 2rem; border-color: rgba(16, 185, 129, 0.2); border-left: 5px solid var(--success); background: rgba(16, 185, 129, 0.02);">
+                <h4 style="font-weight: 800; color: var(--text-dark); font-size: 1.15rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>✔</span> Payment Details Submitted
+                </h4>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin: 0;">
+                    We have received your transfer details. Our billing team is currently verifying the credentials.
+                </p>
+                <div style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-main); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: rgba(0,0,0,0.02); padding: 1rem; border-radius: 8px; border: 1px solid rgba(15,23,42,0.04);">
+                    <div><strong>Network:</strong> {{ order.get_payment_network_display }}</div>
+                    <div><strong>Reference ID:</strong> {{ order.payment_reference }}</div>
+                    <div><strong>Submitted:</strong> {{ order.payment_submitted_at|date:"M d, Y H:i" }}</div>
+                </div>
+                {% if order.payment_receipt %}
+                    <div style="margin-top: 1rem;">
+                        <a href="{{ order.payment_receipt.url }}" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.4rem 1rem; border-radius: 9999px;">View Receipt Screenshot ↗</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% elif order.status == 'pending' %}
+            <!-- Payment submission form -->
+            <div class="glass" style="padding: 2rem; border-color: rgba(37, 99, 235, 0.15); background: #ffffff;">
+                <h3 style="font-weight: 800; color: var(--accent); margin-bottom: 0.5rem; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.5px;">Submit Payment Confirmation</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                    Once you have transferred <strong>GH₵{{ order.total_price }}</strong> via Momo or Bank transfer, please submit the details below to trigger validation and shipment.
+                </p>
+                <form method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1.25rem; margin: 0;">
+                    {% csrf_token %}
+                    <div class="grid-form-2col">
+                        <div class="form-group">
+                            <label style="font-weight: 700; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Payment Network</label>
+                            {{ form.payment_network }}
+                        </div>
+                        <div class="form-group">
+                            <label style="font-weight: 700; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Transaction Reference ID</label>
+                            {{ form.payment_reference }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-weight: 700; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Receipt Screenshot (Momo Message Screen / Receipt JPG/PNG)</label>
+                        {{ form.payment_receipt }}
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="padding: 0.7rem 2rem; border-radius: 9999px; border: none; font-weight: 700; align-self: flex-start;">Confirm Transfer</button>
+                </form>
+            </div>
+        {% endif %}
+
+        <!-- Items table -->
+        <div class="glass" style="padding: 2rem; overflow-x: auto; border-color: rgba(15, 23, 42, 0.06); width: 100%;">
+            <h3 style="font-weight: 800; margin-bottom: 1.25rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; font-size: 1.1rem; border-bottom: 1px solid rgba(15, 23, 42, 0.05); padding-bottom: 0.5rem;">Procurement Order Items</h3>
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-glass); font-weight: 600; color: var(--text-muted); font-size: 0.9rem;">
+                    <th style="padding: 1rem 0.5rem;">Product</th>
+                    <th style="padding: 1rem 0.5rem;">Quantity</th>
+                    <th style="padding: 1rem 0.5rem;">Purchase Price</th>
+                    <th style="padding: 1rem 0.5rem; text-align: right;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+                        <td style="padding: 1rem 0.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.03); border-radius: 6px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--border-glass);">
+                                {% if item.product.images.exists %}
+                                    <img src="{{ item.product.images.first.image.url }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <span style="font-size: 0.65rem; color: var(--text-muted);">No Img</span>
+                                {% endif %}
+                            </div>
+                            <span style="color: var(--text-main);">{{ item.product.name }}</span>
+                        </td>
+                        <td style="padding: 1rem 0.5rem; color: var(--text-muted);">{{ item.quantity }}</td>
+                        <td style="padding: 1rem 0.5rem; color: var(--text-muted);">GH₵{{ item.price }}</td>
+                        <td style="padding: 1rem 0.5rem; text-align: right; font-weight: 700; color: var(--primary);;;">GH₵{{ item.get_cost }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+    
+    <!-- Addresses & Summary -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <!-- Destinations -->
+        <div class="glass" style="padding: 1.5rem;">
+            <h4 style="font-weight: 700; color: var(--primary); border-bottom: 1px solid var(--border-glass); padding-bottom: 0.5rem; margin-bottom: 1rem;">Destination</h4>
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-muted); margin-bottom: 0.25rem;">Shipping Address</div>
+                <div style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap;">{{ order.shipping_address }}</div>
+            </div>
+            <div>
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-muted); margin-bottom: 0.25rem;">Billing Address</div>
+                <div style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap;">{{ order.billing_address }}</div>
+            </div>
+        </div>
+        
+        <!-- Totals -->
+        <div class="glass" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted);">
+                <span>Items total:</span>
+                <span>{{ order.items.count }} unique items</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.35rem; font-weight: 800; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
+                <span>Total Charge:</span>
+                <span style="color: var(--primary);">GH₵{{ order.total_price }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to customize the global WhatsApp button for this specific order -->
+{% block extra_js %}
+<script>
+    const whatsappBtn = document.getElementById('globalWhatsAppBtn');
+    if (whatsappBtn) {
+        whatsappBtn.href = "https://wa.me/233549128355?text=Hello%20MED%20Computers,%20I%20would%20like%20to%20complete%20payment%20for%20Order%20%23{{ order.id }}%20(Total:%20GH₵{{ order.total_price }}).";
+        whatsappBtn.title = "Complete Payment via WhatsApp";
+    }
+</script>
+{% endblock %}
+{% endblock %}

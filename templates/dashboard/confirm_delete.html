@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Delete Confirmation - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div class="form-container glass" style="max-width: 500px; text-align: center;">
+    <svg width="64" height="64" fill="none" stroke="var(--danger)" stroke-width="1.5" viewBox="0 0 24 24" style="margin: 0 auto 1.5rem auto; background: rgba(239, 68, 68, 0.1); padding: 12px; border-radius: 9999px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+    
+    <h2 class="form-title" style="color: var(--text-main);">Confirm Deletion</h2>
+    <p class="form-subtitle" style="margin-bottom: 2rem;">Are you absolutely sure you want to delete the {{ type|lower }} "<strong>{{ item.name }}</strong>"? This operation is permanent and cannot be undone.</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn" style="flex: 1; justify-content: center; background: var(--danger); color: white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">Yes, Delete</button>
+            <a href="{% url cancel_url %}" class="btn btn-outline" style="flex: 1; justify-content: center; text-align: center;">No, Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}Fulfill Order #{{ order.id }} - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem;">
+    <div>
+        <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fulfill Order #{{ order.id }}</h1>
+        <p style="color: var(--text-muted); margin-top: 0.25rem;">Placed by Customer: <strong>{{ order.user.get_full_name|default:order.user.username }}</strong> ({{ order.user.email }})</p>
+    </div>
+    <a href="{% url 'dashboard:admin_order_list' %}" class="btn btn-outline" style="border-radius: 9999px;">&larr; Back to Orders List</a>
+</div>
+
+<!-- Main Split Container -->
+<div class="grid-responsive-2col">
+    
+    <!-- Left Column (Overview & Items list) -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+        
+        <!-- Manual Payment Info Panel (Admin checks this!) -->
+        <div class="glass" style="padding: 2rem; border-color: rgba(15, 23, 42, 0.06); background: white;">
+            <h3 style="font-weight: 800; color: var(--accent); margin-bottom: 1rem; font-size: 1.2rem; border-bottom: 1px solid rgba(15, 23, 42, 0.05); padding-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Manual Payment Telemetry</h3>
+            
+            {% if order.payment_reference %}
+                <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: rgba(15,23,42,0.02); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(15,23,42,0.04);">
+                        <div><strong>Network Submitted:</strong><br><span style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">{{ order.get_payment_network_display }}</span></div>
+                        <div><strong>Transaction reference ID:</strong><br><span style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">{{ order.payment_reference }}</span></div>
+                        <div><strong>Submitted Timestamp:</strong><br><span style="color: var(--text-muted);">{{ order.payment_submitted_at|date:"M d, Y H:i" }}</span></div>
+                    </div>
+                    
+                    {% if order.payment_receipt %}
+                        <div>
+                            <strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Uploaded Receipt Screenshot:</strong>
+                            <a href="{{ order.payment_receipt.url }}" target="_blank" style="display: inline-block; max-width: 100%; border: 1px solid rgba(15,23,42,0.08); border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                                <img src="{{ order.payment_receipt.url }}" alt="Receipt Screenshot" style="max-height: 250px; display: block; object-fit: contain;">
+                            </a>
+                            <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">Click image to view in full screen ↗</div>
+                        </div>
+                    {% else %}
+                        <div style="color: var(--warning); font-weight: 600; font-size: 0.95rem;">⚠️ No receipt screenshot was uploaded. Contact customer for proof.</div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; padding: 1rem; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.15); border-radius: 8px;">
+                    ⏳ Customer has not submitted transaction details on their dashboard yet. Order status remains <strong>Pending</strong>.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Order Items -->
+        <div class="glass" style="padding: 2rem; border-color: rgba(15, 23, 42, 0.06); overflow-x: auto; background: white;">
+            <h3 style="font-weight: 800; margin-bottom: 1.25rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; font-size: 1.1rem; border-bottom: 1px solid rgba(15, 23, 42, 0.05); padding-bottom: 0.5rem;">Ordered Products</h3>
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 2px solid rgba(15, 23, 42, 0.08); font-weight: 700; color: var(--accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <th style="padding: 1rem 0.5rem;">Hardware Product</th>
+                        <th style="padding: 1rem 0.5rem; text-align: center;">Qty</th>
+                        <th style="padding: 1rem 0.5rem;">Purchase Price</th>
+                        <th style="padding: 1rem 0.5rem; text-align: right;">Cost Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                        <tr style="border-bottom: 1px solid rgba(15, 23, 42, 0.04);">
+                            <td style="padding: 1.25rem 0.5rem; font-weight: 700; display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 48px; height: 48px; background: #fafafa; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(15, 23, 42, 0.06); flex-shrink: 0;">
+                                    {% if item.product.images.exists %}
+                                        <img src="{{ item.product.images.first.image.url }}" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {% else %}
+                                        <svg width="20" height="20" fill="none" stroke="var(--text-muted)" stroke-width="1.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 113.758-3.848 5.25 5.25 0 00-10.233-2.33A4.502 4.502 0 002.25 15z"/></svg>
+                                    {% endif %}
+                                </div>
+                                <span style="color: var(--text-main);">{{ item.product.name }}</span>
+                            </td>
+                            <td style="padding: 1.25rem 0.5rem; text-align: center; color: var(--text-muted); font-weight: 600;">{{ item.quantity }}</td>
+                            <td style="padding: 1.25rem 0.5rem; color: var(--text-muted); font-weight: 600;">GH₵{{ item.price }}</td>
+                            <td style="padding: 1.25rem 0.5rem; font-weight: 800; color: var(--primary); text-align: right;">GH₵{{ item.get_cost }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Right Column (Status Actions, Destinations, Summary) -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- Status Action Card -->
+        <div class="glass" style="padding: 1.5rem; border-color: rgba(37, 99, 235, 0.15); background: white;">
+            <h4 style="font-weight: 800; color: var(--accent); border-bottom: 1px solid rgba(15,23,42,0.05); padding-bottom: 0.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.9rem;">Change Fulfillment Status</h4>
+            <form action="{% url 'dashboard:admin_order_status_update' order.id %}" method="POST" style="margin: 0; display: flex; flex-direction: column; gap: 1rem;">
+                {% csrf_token %}
+                <select name="status" class="form-control" style="font-weight: 700; padding: 0.6rem 0.75rem; border-color: rgba(15,23,42,0.15); border-radius: 8px;">
+                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="paid" {% if order.status == 'paid' %}selected{% endif %}>Paid</option>
+                    <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                </select>
+                <button type="submit" class="btn btn-primary" style="justify-content: center; font-weight: 700; border: none; border-radius: 8px; padding: 0.6rem;">Update Status &amp; Notify</button>
+            </form>
+            <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                💡 Changing status will automatically compile and print a notification mail log to the server console.
+            </div>
+        </div>
+
+        <!-- Destination Address -->
+        <div class="glass" style="padding: 1.5rem; background: white; border-color: rgba(15,23,42,0.06);">
+            <h4 style="font-weight: 800; color: var(--accent); border-bottom: 1px solid rgba(15,23,42,0.05); padding-bottom: 0.5rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.9rem;">Shipping Target</h4>
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Recipient Phone:</div>
+                <div style="font-size: 0.95rem; color: var(--text-main); font-weight: 600;">{{ order.user.phone_number|default:"No phone registered" }}</div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Shipping Address:</div>
+                <div style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap;">{{ order.shipping_address }}</div>
+            </div>
+            <div>
+                <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Billing Address:</div>
+                <div style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; white-space: pre-wrap;">{{ order.billing_address }}</div>
+            </div>
+        </div>
+        
+        <!-- Order Totals Box -->
+        <div class="glass" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; background: white; border-color: rgba(15,23,42,0.06);">
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">
+                <span>Total Items:</span>
+                <span style="font-weight: 700; color: var(--text-main);">{{ order.items.all|length }} units</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.35rem; font-weight: 800; border-top: 1px solid rgba(15,23,42,0.08); padding-top: 0.75rem;">
+                <span>Grand Total:</span>
+                <span style="color: var(--primary);">GH₵{{ order.total_price }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

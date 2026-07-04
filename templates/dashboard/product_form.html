@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} - MED COMPUTERS{% endblock %}
+
+{% block content %}
+<div class="form-container glass" style="max-width: 600px;">
+    <h2 class="form-title">{{ title }}</h2>
+    <p class="form-subtitle">Define specifications and inventory telemetry for this product listing</p>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div style="color: var(--danger); margin-bottom: 1rem; font-size: 0.9rem;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <span style="color: var(--danger); font-size: 0.8rem;">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <!-- Product Image upload -->
+        <div class="form-group" style="margin-top: 1.5rem;">
+            <label for="id_image">Product Image (Primary Display)</label>
+            <input type="file" name="image" id="id_image" accept="image/*" class="form-control">
+            {% if product and product.images.exists %}
+                <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Current Image:</span>
+                    <img src="{{ product.images.first.image.url }}" alt="" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-glass);">
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save Product</button>
+            <a href="{% url 'dashboard:product_list' %}" class="btn btn-outline" style="flex: 1; justify-content: center; text-align: center;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
