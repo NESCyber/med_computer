@@ -18,21 +18,43 @@
     /* Custom CSS variables to skin Django Admin to MED Computers Blue & White Theme */
     :root {
         --primary: #2563eb !important;
+        --primary-fg: #ffffff !important;
         --primary-hover: #1d4ed8 !important;
         --secondary: #1e3a8a !important;
         --accent: #1e3a8a !important;
+        
+        --body-fg: #0f172a !important;
+        --body-bg: #f8fafc !important;
+        --body-quiet-color: #475569 !important;
+        --body-loud-color: #0f172a !important;
+        
         --header-bg: #1e3a8a !important;
         --header-color: #ffffff !important;
-        --header-link-color: rgba(255, 255, 255, 0.85) !important;
-        --breadcrumbs-bg: #f8fafc !important;
+        --header-link-color: #ffffff !important;
+        
+        --breadcrumbs-bg: #f1f5f9 !important;
+        --breadcrumbs-fg: #475569 !important;
         --breadcrumbs-link-color: #2563eb !important;
+        
         --link-color: #2563eb !important;
         --link-hover-color: #1d4ed8 !important;
-        --body-bg: #f8fafc !important;
+        --link-selected-color: #2563eb !important;
+        
+        --title-color: #0f172a !important;
+        
+        /* Sidebar Variables */
+        --sidebar-bg: #ffffff !important;
+        --sidebar-color: #475569 !important;
+        --sidebar-link-color: #475569 !important;
+        --sidebar-link-hover-color: #2563eb !important;
+        
+        /* Table / List Variables */
+        --border-color: rgba(15, 23, 42, 0.08) !important;
     }
 
     body, input, select, textarea, button {
         font-family: 'Outfit', sans-serif !important;
+        color: #0f172a !important;
     }
 
     #header {
@@ -53,11 +75,16 @@
         color: #ffffff !important;
     }
 
+    /* Titles & Headings Contrast */
+    h1, h2, h3, h4, h5, h6, .content-heading, #content h1, .content h1 {
+        color: #0f172a !important;
+    }
+
     /* Change lists and breadcrumbs styling overrides */
     div.breadcrumbs {
-        background: #f8fafc !important;
+        background: #f1f5f9 !important;
         border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
-        color: #64748b !important;
+        color: #475569 !important;
         font-weight: 600 !important;
         font-size: 0.8rem !important;
         padding: 0.75rem 2rem !important;
@@ -69,7 +96,7 @@
         color: #2563eb !important;
     }
 
-    /* Table Headers */
+    /* Table Headers & Containers */
     .module h2, .module caption, .inline-group h2 {
         background: #2563eb !important;
         color: #ffffff !important;
@@ -79,6 +106,34 @@
         letter-spacing: 0.5px !important;
         padding: 0.75rem 1rem !important;
         border-radius: 8px 8px 0 0 !important;
+    }
+
+    .module {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02) !important;
+        overflow: hidden !important;
+    }
+
+    /* Table Cell styling */
+    table tbody td, table tbody th {
+        color: #334155 !important;
+        background: #ffffff !important;
+    }
+
+    table tbody tr a {
+        color: #2563eb !important;
+        font-weight: 600 !important;
+    }
+
+    table tbody tr a:hover {
+        color: #1d4ed8 !important;
+    }
+
+    /* Select actions bar text color */
+    .actions, .actions span, .actions label, .action-counter {
+        color: #475569 !important;
     }
 
     /* Action/Save buttons styling */
@@ -107,18 +162,68 @@
         background: #122558 !important;
     }
 
-    /* Left Sidebar Overrides to make it clean */
+    /* Left Sidebar Overrides */
     #nav-sidebar {
         border-right: 1px solid rgba(15, 23, 42, 0.05) !important;
         background: #ffffff !important;
     }
 
+    #nav-sidebar table {
+        background: #ffffff !important;
+    }
+
+    #nav-sidebar a {
+        color: #475569 !important;
+        font-weight: 600 !important;
+    }
+
+    #nav-sidebar a:hover {
+        color: #2563eb !important;
+        background: rgba(37, 99, 235, 0.04) !important;
+    }
+
     #nav-sidebar th, #nav-sidebar td {
         font-size: 0.85rem !important;
+        background: #ffffff !important;
+    }
+
+    #nav-sidebar .app-auth, #nav-sidebar .app-products {
+        background: #ffffff !important;
     }
 
     .toggle-sidebar {
         background: #2563eb !important;
+    }
+
+    /* Filters on the right */
+    #changelist-filter {
+        background: #ffffff !important;
+        border-left: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    #changelist-filter h2 {
+        background: #2563eb !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+    }
+
+    #changelist-filter h3 {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        margin-top: 1rem !important;
+    }
+
+    #changelist-filter ul a {
+        color: #475569 !important;
+        font-weight: 600 !important;
+    }
+
+    #changelist-filter ul a:hover, #changelist-filter ul li.selected a {
+        color: #2563eb !important;
+        border-left-color: #2563eb !important;
     }
 
     /* Form Fields focused border styling */
